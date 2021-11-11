@@ -1,12 +1,8 @@
 Embed Simple Analytics on your website.
 
-Run the build script
+## Install
 
-```
-npm run build
-```
-
-Copy the dist file to your server.
+Copy the `embed.js` dist file to your server.
 
 Copy this code to your website:
 
@@ -22,4 +18,18 @@ Copy this code to your website:
   src="./dist/embed.js"
   onerror="document.getElementById(this.dataset.canvasId).style.display = 'none'"
 ></script>
+```
+
+### Development
+
+During development:
+
+```bash
+npm run dev
+```
+
+Done? Run the build script
+
+```
+npm run build
 ```
