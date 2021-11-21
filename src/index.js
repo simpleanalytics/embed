@@ -101,7 +101,7 @@ const generateChart = async (chartOptions) => {
 
   const borderWidth = getSetting({
     default: "2",
-    value: mainDataset.borderWidth || chartOptions.borderWidth,
+    value: chartOptions.borderWidth || mainDataset.borderWidth,
     regex: /[0-9]{1,2}/i,
     warning: 'Invalid border width, enter a number in pixels, eg: "2"',
   });
@@ -111,7 +111,7 @@ const generateChart = async (chartOptions) => {
 
   const borderColorPageViews = getSetting({
     default: colors.pageViews.border,
-    value: mainDataset.pageViewsColor || chartOptions.pageViewsColor || color,
+    value: chartOptions.pageViewsColor || mainDataset.pageViewsColor || color,
     regex: /[0-9a-f]{6}/i,
     warning: 'Invalid page views color, enter a hex color, eg: "66ff00"',
     normalize: (value) => "#" + value.replace("#", ""),
@@ -119,7 +119,7 @@ const generateChart = async (chartOptions) => {
 
   const borderColorVisitors = getSetting({
     default: colors.visitors.border,
-    value: mainDataset.visitorsColor || chartOptions.visitorsColor || color,
+    value: chartOptions.visitorsColor || mainDataset.visitorsColor || color,
     regex: /[0-9a-f]{6}/i,
     warning: 'Invalid visitors color, enter a hex color, eg: "66ff00"',
     normalize: (value) => "#" + value.replace("#", ""),
@@ -127,7 +127,7 @@ const generateChart = async (chartOptions) => {
 
   const areaOpacityPercent = getSetting({
     default: "20",
-    value: mainDataset.areaOpacity || chartOptions.areaOpacity,
+    value: chartOptions.areaOpacity || mainDataset.areaOpacity,
     regex: /(100|[0-9]{1,2})/i,
     warning: 'Invalid opacity, enter a number between 1-100, eg: "50"',
   });
@@ -143,7 +143,7 @@ const generateChart = async (chartOptions) => {
 
   const textColor = getSetting({
     default: siteTextColor || "#000000",
-    value: mainDataset.textColor || chartOptions.textColor,
+    value: chartOptions.textColor || mainDataset.textColor,
     regex: /[0-9a-f]{6}/i,
     warning: 'Invalid visitors color, enter a hex color, eg: "66ff00"',
     normalize: (value) => "#" + value.replace("#", ""),
@@ -151,10 +151,18 @@ const generateChart = async (chartOptions) => {
 
   const types = getSetting({
     default: legacy ? ["pageviews"] : ["visitors"],
-    value: mainDataset.types || chartOptions.types,
+    value: chartOptions.types || mainDataset.types,
     regex: /[a-z, ]+/i,
     warning: 'Invalid types, try: "pageviews,visitors"',
     normalize: (value) => value.split(",").map((value) => value.trim()),
+  });
+
+  const showLogo = getSetting({
+    default: !legacy,
+    value: chartOptions.showLogo || mainDataset.showLogo,
+    regex: /(true|false|yes|no)/i,
+    warning: 'Invalid show logo, try: "false"',
+    normalize: (value) => ["true", "yes"].includes(value),
   });
 
   if (!types.length) types.push("visitors");
@@ -231,7 +239,7 @@ const generateChart = async (chartOptions) => {
 
   // Only draw when parent element has a valid position
   const { position } = getComputedStyle(element) || {};
-  if (!["static", "relative"].includes(position)) return;
+  if (!showLogo || !["static", "relative"].includes(position)) return;
 
   // Make container relative
   element.style.position = "relative";
@@ -374,6 +382,7 @@ function onReady() {
         visitorsColor,
         areaOpacity,
         types,
+        showLogo,
       } = dataset;
 
       charts.push({
@@ -394,6 +403,7 @@ function onReady() {
         visitorsColor,
         areaOpacity,
         types,
+        showLogo,
       });
     } catch (error) {
       triggerOnload(false);
