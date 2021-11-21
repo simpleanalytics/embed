@@ -1,4 +1,14 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run build
+# Run build when source files have changed
+modifiedSrc=$(git ls-files --modified src | wc -l)
+if [ $modifiedSrc != 0 ]; then
+  npm run build
+fi
+
+# Stop when dist folder has changes
+modifiedDist=$(git ls-files --modified dist | wc -l)
+if [ $modifiedDist != 0 ]; then
+  echo "Checkin files from 'npm run build' before you commit." && exit 1
+fi
