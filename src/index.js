@@ -41,7 +41,14 @@ Chart.register(
 );
 
 const headers = { "Content-Type": "application/json" };
-const mainDataset = document.currentScript?.dataset || {};
+const cdnUrl = '[src="https://scripts.simpleanalyticscdn.com/embed.js"]';
+const localUrl = '[src$="/embed.js"]';
+const currentScript =
+  document.currentScript ||
+  document.querySelector(cdnUrl) ||
+  document.querySelector(localUrl);
+
+const mainDataset = currentScript?.dataset || {};
 let siteTextColor;
 
 const dataset = {
