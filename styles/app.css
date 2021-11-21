@@ -1,0 +1,46 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+main {
+  display: block;
+  width: 600px;
+  max-width: calc(100% - 2rem);
+  margin: 2rem auto;
+
+  /* border: 1px solid var(--color-bg-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow) var(--color-shadow);
+  display: block;
+  max-width: var(--width-card-wide);
+  min-width: var(--width-card);
+  padding: 1.5rem;
+  text-align: var(--justify-normal); */
+}
+main h1 {
+  margin-top: 0;
+}
+hr {
+  margin: 3rem 0 1rem;
+}
+@media only screen and (max-width: 600px) {
+  main {
+    margin: 1rem auto;
+    padding: 0;
+  }
+}
+
+pre {
+  padding-top: 0;
+}
+pre code {
+  padding: 1rem;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+.mb-0 {
+  margin-bottom: 0;
+}

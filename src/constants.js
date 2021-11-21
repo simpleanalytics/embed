@@ -1,5 +1,8 @@
 import { k } from "./utils";
 
+export const docs = "https://docs.simpleanalytics.com/embed-chart-on-your-site";
+export const host = "https://simpleanalytics.com";
+
 export const options = {
   interaction: {
     intersect: false,
@@ -35,6 +38,19 @@ export const options = {
     },
     tooltip: {
       displayColors: false,
+      callbacks: {
+        label: function (context) {
+          let label = context.dataset.label || "";
+
+          if (label) {
+            label += ": ";
+          }
+          if (context.parsed.y !== null) {
+            label += k(context.parsed.y);
+          }
+          return label;
+        },
+      },
     },
   },
 };
@@ -45,6 +61,6 @@ const greenBlueDark = "#00c5e5";
 const greenBlueLight = "#dff6fa";
 
 export const colors = {
-  pageviews: { border: blueDark, background: blueLight },
+  pageViews: { border: blueDark, background: blueLight },
   visitors: { border: greenBlueDark, background: greenBlueLight },
 };

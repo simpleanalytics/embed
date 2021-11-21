@@ -3,22 +3,112 @@
   <head>
     <meta charset="utf-8" />
     <title>Simple Analytics Embed</title>
-    <link href="style.css" rel="stylesheet" />
+    <link href="/styles/mvp.css" rel="stylesheet" />
+    <link href="/styles/app.css" rel="stylesheet" />
   </head>
   <body>
-    <div style="border: 2px solid #ccc">
-      <canvas id="sa-chart" width="400" height="200"></canvas>
-    </div>
+    <main>
+      <h1>Simple Analytics Embed</h1>
+      <p>Go to <a href="/legacy.html">legacy embed</a>.</p>
+
+      <p>
+        Include this code somewhere on your page. This loads the library to show
+        charts on your website. It looks for elements that you specify in
+        <code>data-chart-selectors</code>:
+      </p>
+
+      <pre><code>&lt;script
+  src="https://scripts.simpleanalyticscdn.com/embed.js"
+  data-chart-selectors="#chart-id,.chart-class"
+  data-onload=""
+>&lt;/script></code></pre>
+
+      <p>
+        In the script above we specify two charts: <code>#chart-id</code> and
+        <code>.chart-class</code>. These selectors are directly passed to
+        <code>querySelectorAll</code>.
+      </p>
+
+      <h2>First chart <code>#chart-id</code></h2>
+
+      <pre><code>&lt;div
+  id="chart-id"
+  data-hostname="remoteok.com"
+>&lt;/div></code></pre>
+
+      <form>
+        <div id="chart-id" data-hostname="remoteok.com">
+          <p>Chart is loading... Doesn't load? It might be an ad-blocker.</p>
+        </div>
+      </form>
+
+      <h2>Second chart <code>.chart-class</code></h2>
+
+      <pre><code>&lt;script>
+  function onLoad(ok) {
+    if (ok) console.log("All charts loaded successfully");
+    else {
+      // Hide all elements that show charts
+      // ...
+    }
+  }
+&lt;/script>
+
+&lt;div
+  class="chart-class"
+  data-hostname="remoteok.com"
+  data-start="2020-11-11"
+  data-end="2021-11-11"
+  data-types="visitors"
+  data-page-views-selector="#pageviews"
+  data-visitors-selector=".visitors"
+  data-y-max="60000"
+  data-timezone="Europe/Amsterdam"
+  data-border-width="1"
+  data-text-color="#ff6600"
+  data-page-views-color="#ff6600"
+  data-visitors-color="#cc2200"
+  data-area-opacity="10"
+>&lt;/div></code></pre>
+
+      <p>
+        RemoteOK had <span id="pageviews">...</span> page views and
+        <span class="visitors">&hellip;</span> visitors in the last year.
+      </p>
+
+      <form>
+        <div
+          class="chart-class"
+          data-hostname="remoteok.com"
+          data-start="2020-11-11"
+          data-end="2021-11-11"
+          data-types="pageviews,visitors"
+          data-page-views-selector="#pageviews"
+          data-visitors-selector=".visitors"
+          data-y-max="60000"
+          data-timezone="Europe/Amsterdam"
+          data-border-width="1"
+          data-text-color="#ff6600"
+          data-page-views-color="ff6600"
+          data-visitors-color="cc2200"
+          data-area-opacity="10"
+        >
+          <p>Chart is loading... Doesn't load? It might be an ad-blocker.</p>
+        </div>
+      </form>
+    </main>
+
+    <script>
+      function onLoad(ok) {
+        if (ok) console.log("All charts loaded successfully");
+        else console.log("Error loading charts");
+      }
+    </script>
 
     <script
-      data-canvas-id="sa-chart"
-      data-hostname="remoteok.com"
-      data-start="2020-11-11"
-      data-end="2021-11-11"
-      data-y-max="60000"
       src="./dist/embed.js"
-      onerror="document.getElementById(this.dataset.canvasId).style.display = 'none'"
+      data-chart-selectors="#chart-id,.chart-class"
+      data-onload="onLoad"
     ></script>
-    <script></script>
   </body>
 </html>
