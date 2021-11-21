@@ -1,20 +1,20 @@
 import {
-  CategoryScale,
   Chart,
   Filler,
   LinearScale,
   LineController,
   LineElement,
   PointElement,
+  TimeScale,
   Title,
   Tooltip,
 } from "chart.js";
+import "chartjs-adapter-date-fns";
 import cloneDeep from "lodash.clonedeep";
 
 import { colors, docs, host, options } from "./constants";
 import { log, prefix } from "./logger";
 import {
-  generateLabel,
   removeChildren,
   k,
   getSetting,
@@ -30,14 +30,14 @@ if (window.saEmbedScriptLoaded) {
 }
 
 Chart.register(
-  LineController,
   Filler,
+  LinearScale,
+  LineController,
   LineElement,
   PointElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Title
+  TimeScale,
+  Title,
+  Tooltip
 );
 
 const headers = { "Content-Type": "application/json" };
@@ -87,7 +87,7 @@ const generateChart = async (chartOptions) => {
   const url = `${host}/${hostname}.json?${params}`;
   const response = await fetch(url, { headers });
   const json = await response.json();
-  const labels = json?.histogram.map(generateLabel);
+  const labels = json?.histogram.map(({ date }) => date);
 
   const pageViews = json?.histogram.map((day) => day.pageviews);
   const visitors = json?.histogram.map((day) => day.visitors);
@@ -119,7 +119,7 @@ const generateChart = async (chartOptions) => {
   });
 
   const areaOpacityPercent = getSetting({
-    default: "50",
+    default: "20",
     value: mainDataset.areaOpacity || chartOptions.areaOpacity,
     regex: /(100|[0-9]{1,2})/i,
     warning: 'Invalid opacity, enter a number between 1-100, eg: "50"',
@@ -206,38 +206,40 @@ const generateChart = async (chartOptions) => {
   const { position } = getComputedStyle(element) || {};
   if (!["static", "relative"].includes(position)) return;
 
+  // Make container relative
   element.style.position = "relative";
 
-  const x = chart.scales.x || {};
-  const ticksWidth =
-    x._length && x.ticks?.length
-      ? Math.round(x._length / (x.ticks.length - 1))
-      : 50;
-
+  // Get margins
   const marginTop = chart.scales.y?._margins?.top || 10;
-  const boxSize = Math.min(ticksWidth, 80);
-  const top = marginTop + 20;
+  const boxSize = 40;
+  const boxSpacing = 25;
+  const top = marginTop + boxSpacing;
 
+  // Create link element
   const box = document.createElement("a");
+  box.style.all = "unset";
   box.style.position = "absolute";
   box.style.top = `${top}px`;
-  box.style.left = `${chart.scales.y.width + ticksWidth / 2}px`;
+  box.style.left = `${chart.scales.y.width + boxSpacing}px`;
   box.style.height = `${boxSize}px`;
   box.style.width = `${boxSize}px`;
   box.style.borderRadius = "5px";
   box.style.color = borderColorVisitors;
   box.style.backgroundColor = backgroundColorVisitors;
+  box.style.border = `${borderWidth}px solid ${borderColorVisitors}`;
   box.style.opacity = "0.5";
   box.style.cursor = "pointer";
   box.style.display = "flex";
   box.style.justifyContent = "center";
   box.style.alignItems = "center";
 
+  // Link to public dashboard
   box.href = `${host}/${hostname}?utm_source=${hostname}&utm_medium=embed`;
   box.referrerPolicy = "no-referrer-when-downgrade";
   box.target = "_blank";
   box.rel = "noopener";
 
+  // Bind hover styles
   box.addEventListener("mouseenter", () => {
     box.style.opacity = "1";
   });
@@ -245,7 +247,8 @@ const generateChart = async (chartOptions) => {
     box.style.opacity = "0.5";
   });
 
-  const svg = createSVGLogo({ fill: borderColorPageViews });
+  // Attach to DOM
+  const svg = createSVGLogo({ fill: borderColorVisitors });
   box.appendChild(svg);
   element.appendChild(box);
 };

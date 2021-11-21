@@ -25,13 +25,6 @@ export const k = (number, roundNumbers = true) => {
   return (number / 1000).toFixed(1) + "k";
 };
 
-export const generateLabel = (day) =>
-  new Intl.DateTimeFormat("en-US", {
-    timeZone: "UTC",
-    month: "short",
-    day: "numeric",
-  }).format(new Date(day.date));
-
 export const removeChildren = (parent) => {
   while (parent.lastChild) {
     parent.removeChild(parent.lastChild);
