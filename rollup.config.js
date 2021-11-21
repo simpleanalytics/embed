@@ -6,7 +6,7 @@ import commonjs from "rollup-plugin-commonjs";
 const legacy = {
   input: "src/index-legacy.js",
   output: {
-    file: "dist/embed-legacy.js",
+    file: "dist/embed.js",
     format: "iife",
     compact: true,
     banner: "/*! Simple Analytics Embed script for IE11 and up */",
@@ -22,7 +22,7 @@ const legacy = {
   ],
 };
 
-const latest = {
+const dev = {
   input: "src/index.js",
   output: {
     file: "dist/embed.js",
@@ -38,7 +38,6 @@ const latest = {
   ],
 };
 
-const compile =
-  process.env.NODE_ENV === "production" ? [legacy, latest] : [latest];
+const compile = process.env.NODE_ENV === "production" ? [legacy] : [dev];
 
 export default compile;
