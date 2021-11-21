@@ -32,11 +32,6 @@ export const options = {
       time: { tooltipFormat: "MMMM d, yyyy" },
       ticks: {
         maxRotation: 0,
-        // callback: function (value, index, values) {
-        //   var label = this.getLabelForValue(value);
-        //   if (index === 0) return label;
-        //   return label.replace(/, 20[0-9]{2}/, "");
-        // },
       },
     },
   },

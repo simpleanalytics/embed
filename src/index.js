@@ -135,7 +135,7 @@ const generateChart = async (chartOptions) => {
   );
 
   const textColor = getSetting({
-    default: siteTextColor || "#abc",
+    default: siteTextColor || "#000000",
     value: mainDataset.textColor || chartOptions.textColor,
     regex: /[0-9a-f]{6}/i,
     warning: 'Invalid visitors color, enter a hex color, eg: "66ff00"',
@@ -184,6 +184,7 @@ const generateChart = async (chartOptions) => {
   // Do DOM manupilations
   removeChildren(element);
   const canvas = document.createElement("canvas");
+  canvas.ariaLabel = `Chart with visitors data from ${hostname}`;
   element.appendChild(canvas);
 
   Chart.defaults.color = textColor;
@@ -201,6 +202,25 @@ const generateChart = async (chartOptions) => {
 
   // Expose so customer can modify Chart instance
   if (expose && expose !== "false") window[expose] = chart;
+
+  // Update text color on dark mode change
+  const updateTextColor = () => {
+    const p = document.querySelector("p");
+    const { color } = getComputedStyle(p) || {};
+    if (color === chart.options.scales.y.ticks.color) return;
+    chart.options.scales.y.ticks.color = color;
+    chart.options.scales.x.ticks.color = color;
+    chart.update();
+  };
+
+  // Listen for dark mode change
+  if (window.matchMedia)
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (event) => {
+        window.setTimeout(() => updateTextColor(), 0);
+        window.setTimeout(() => updateTextColor(), 500);
+      });
 
   // Only draw when parent element has a valid position
   const { position } = getComputedStyle(element) || {};
@@ -234,6 +254,8 @@ const generateChart = async (chartOptions) => {
   box.style.alignItems = "center";
 
   // Link to public dashboard
+  box.title = `Go to Simple Analytics dashboard`;
+  box.ariaLabel = "Open public dashboard of this chart on Simple Analytics";
   box.href = `${host}/${hostname}?utm_source=${hostname}&utm_medium=embed`;
   box.referrerPolicy = "no-referrer-when-downgrade";
   box.target = "_blank";
@@ -249,6 +271,7 @@ const generateChart = async (chartOptions) => {
 
   // Attach to DOM
   const svg = createSVGLogo({ fill: borderColorVisitors });
+  svg.ariaLabel = "Simple Analytics logo";
   box.appendChild(svg);
   element.appendChild(box);
 };
