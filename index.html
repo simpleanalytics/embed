@@ -17,11 +17,13 @@
         <code>data-chart-selectors</code>:
       </p>
 
-      <pre><code>&lt;script
+      <pre><code>&lt;!-- Simple Analytics embed script for modern browsers -->
+&lt;script
   type="module"
   src="https://scripts.simpleanalyticscdn.com/embed.js"
   data-chart-selectors="#chart-id,.chart-class"
 >&lt;/script>
+&lt;!-- Simple Analytics embed script for old browsers -->
 &lt;script
   nomodule
   src="https://scripts.simpleanalyticscdn.com/embed-legacy.js"
@@ -105,13 +107,24 @@
 
     <script>
       function onLoad(ok) {
-        if (ok) console.log("All charts loaded successfully");
+        if (typeof ok !== "boolean")
+          console.log("Onload response is no boolean:", ok);
+        else if (ok) console.log("All charts loaded successfully");
         else console.log("Error loading charts");
       }
     </script>
 
+    <!-- Simple Analytics embed script for modern browsers -->
     <script
-      src="./dist/embed.js"
+      type="module"
+      src="/dist/embed.js"
+      data-chart-selectors="#chart-id,.chart-class"
+      data-onload="onLoad"
+    ></script>
+    <!-- Simple Analytics embed script for old browsers -->
+    <script
+      nomodule
+      src="/dist/embed-legacy.js"
       data-chart-selectors="#chart-id,.chart-class"
       data-onload="onLoad"
     ></script>
