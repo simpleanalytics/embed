@@ -85,12 +85,11 @@ const generateChart = async (chartOptions) => {
   element.style.justifyContent = "center";
   element.style.textAlign = "center";
 
-  element.querySelector("p").textContent =
-    "Simple Analytics chart is loading...";
+  const p = element.querySelector("p");
+  if (p) p.textContent = "Simple Analytics chart is loading...";
 
   if (typeof Proxy !== "function") {
-    element.querySelector("p").textContent =
-      "Can not load chart in this browser.";
+    if (p) p.textContent = "Can not load chart in this browser.";
     return log("Can not load chart in this browser", "error");
   }
 
