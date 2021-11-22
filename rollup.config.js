@@ -3,13 +3,15 @@ import { terser } from "rollup-plugin-terser";
 import babel from "rollup-plugin-babel";
 import commonjs from "rollup-plugin-commonjs";
 
+const today = new Date().toISOString().split("T")[0];
+
 const legacy = {
   input: "src/index-legacy.js",
   output: {
     file: "dist/embed.js",
     format: "iife",
     compact: true,
-    banner: "/*! Simple Analytics Chart Embed script for IE11 and up */",
+    banner: `/*! Simple Analytics - Privacy friendly analytics - Chart embed (docs.simpleanalytics.com/embed; ${today}) */`,
     sourcemap: true,
   },
   treeshake: true,
@@ -29,7 +31,7 @@ const dev = {
     file: "dist/embed.js",
     format: "cjs",
     compact: true,
-    banner: "/*! Simple Analytics Embed script for modern browsers */",
+    banner: "/*! Simple Analytics Embed script development version */",
   },
   treeshake: true,
   plugins: [

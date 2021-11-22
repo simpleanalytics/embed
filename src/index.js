@@ -49,7 +49,7 @@ const currentScript =
   document.querySelector(localUrl);
 
 const mainDataset = currentScript?.dataset || {};
-let siteTextColor;
+let siteTextColor, siteFontFamily, siteFontSize;
 
 const dataset = {
   fill: "origin",
@@ -213,6 +213,11 @@ const generateChart = async (chartOptions) => {
 
   Chart.defaults.color = textColor;
   Chart.defaults.borderColor = addOpacity(textColor, 7);
+  if (siteFontFamily)
+    Chart.defaults.font = {
+      family: siteFontFamily,
+      size: Math.max(siteFontSize, 12) - 2 || 12,
+    };
 
   const chart = new Chart(canvas, {
     type: "line",
@@ -319,8 +324,10 @@ const triggerOnload = (ok = false) => {
 function onReady() {
   // Grab default text color of host website
   const p = document.querySelector("p");
-  const { color } = getComputedStyle(p) || {};
+  const { color, fontFamily, fontSize } = getComputedStyle(p) || {};
   siteTextColor = color;
+  siteFontFamily = fontFamily;
+  siteFontSize = fontSize;
 
   // Get legacy elements
   const legacyElements = document.querySelectorAll("[data-sa-graph-url]");
