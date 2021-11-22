@@ -9,7 +9,8 @@ const legacy = {
     file: "dist/embed.js",
     format: "iife",
     compact: true,
-    banner: "/*! Simple Analytics Embed script for IE11 and up */",
+    banner: "/*! Simple Analytics Chart Embed script for IE11 and up */",
+    sourcemap: true,
   },
   treeshake: true,
   plugins: [
