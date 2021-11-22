@@ -2,8 +2,11 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 import { babel } from "@rollup/plugin-babel";
 import commonjs from "@rollup/plugin-commonjs";
+import replace from "@rollup/plugin-replace";
 
 const today = new Date().toISOString().slice(0, 16) + "Z";
+const emptyComment = "/*! empty comment */";
+const commentStart = "/*! ";
 
 const full = {
   input: "src/index-full.js",
@@ -11,13 +14,18 @@ const full = {
     file: "dist/embed.js",
     format: "iife",
     compact: true,
-    banner: `/*! Simple Analytics - Privacy friendly analytics - Chart embed (docs.simpleanalytics.com/embed; ${today}) */`,
+    banner: [
+      `/*! Simple Analytics - Privacy friendly analytics - Chart embed (docs.simpleanalytics.com/embed; ${today}) */`,
+      emptyComment,
+    ].join("\n"),
     sourcemap: true,
   },
   treeshake: true,
   plugins: [
     nodeResolve(),
     commonjs(),
+
+    // Use inline babel settings
     babel({
       presets: [
         [
@@ -34,7 +42,17 @@ const full = {
       exclude: [/\/core-js\//],
       babelHelpers: "bundled",
     }),
+
+    // Minify with terser
     terser(),
+
+    // Replace empty comment so we have a new line
+    replace({
+      preventAssignment: true,
+      [emptyComment]: "",
+      [commentStart]: "/* ",
+      delimiters: ["", ""],
+    }),
   ],
 };
 
