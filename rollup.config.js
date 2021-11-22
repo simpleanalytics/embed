@@ -1,12 +1,12 @@
-import resolve from "@rollup/plugin-node-resolve";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
-import babel from "rollup-plugin-babel";
-import commonjs from "rollup-plugin-commonjs";
+import { babel } from "@rollup/plugin-babel";
+import commonjs from "@rollup/plugin-commonjs";
 
-const today = new Date().toISOString().split("T")[0];
+const today = new Date().toISOString().slice(0, 16) + "Z";
 
-const legacy = {
-  input: "src/index-legacy.js",
+const full = {
+  input: "src/index-full.js",
   output: {
     file: "dist/embed.js",
     format: "iife",
@@ -16,12 +16,25 @@ const legacy = {
   },
   treeshake: true,
   plugins: [
-    resolve(),
-    babel({
-      exclude: "node_modules/**",
-    }),
+    nodeResolve(),
     commonjs(),
-    process.env.NODE_ENV === "production" && terser(),
+    babel({
+      presets: [
+        [
+          "@babel/env",
+          {
+            modules: false,
+            useBuiltIns: "usage",
+            corejs: 3,
+            targets: "ie 11",
+          },
+        ],
+      ],
+      extensions: [".js"],
+      exclude: [/\/core-js\//],
+      babelHelpers: "bundled",
+    }),
+    terser(),
   ],
 };
 
@@ -34,13 +47,9 @@ const dev = {
     banner: "/*! Simple Analytics Embed script development version */",
   },
   treeshake: true,
-  plugins: [
-    resolve(),
-    commonjs(),
-    process.env.NODE_ENV === "production" && terser(),
-  ],
+  plugins: [nodeResolve(), commonjs()],
 };
 
-const compile = process.env.NODE_ENV === "production" ? [legacy] : [dev];
+const compile = process.env.NODE_ENV === "production" ? [full] : [dev];
 
 export default compile;
