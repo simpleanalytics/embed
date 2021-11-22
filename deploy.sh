@@ -15,6 +15,12 @@ if ! [[ $PWD = */embed ]] || ! [[ -f "./dist/embed.js" ]]; then
   exit 1
 fi
 
+seconds=$(date +%S)
+if [[ $seconds -gt 40 ]]; then
+  echo "==> It is $seconds seconds and the build changes soon, run right after a new minute"
+  exit 1
+fi
+
 if [[ `git status --porcelain` ]]; then
   echo -e "==> ${RED}There are changes in your repo, commit and test them first${RESET}"
   exit 1

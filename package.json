@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepare": "husky install",
     "dev": "./node_modules/.bin/rollup -c --watch",
     "build": "NODE_ENV=production ./node_modules/.bin/rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,7 +15,6 @@
     "chart.js": "^3.6.0",
     "chartjs-adapter-date-fns": "^2.0.0",
     "date-fns": "^2.26.0",
-    "husky": "^7.0.4",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
