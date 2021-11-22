@@ -15,7 +15,7 @@ if ! [[ $PWD = */embed ]] || ! [[ -f "./dist/embed.js" ]]; then
   exit 1
 fi
 
-seconds=$(date +%S)
+seconds=$(date +%S | sed 's/^0*//')
 if [[ $seconds -gt 40 ]]; then
   echo "==> It is $seconds seconds and the build changes soon, run right after a new minute"
   exit 1
