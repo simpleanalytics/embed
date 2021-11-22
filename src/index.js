@@ -230,7 +230,7 @@ const generateChart = async (chartOptions) => {
     options: optionsCopy,
   });
 
-  // Show numbers in HTML elements
+  // Show numbers in HTML elements if they exist
   if (pageViewsElement) pageViewsElement.textContent = k(json.pageviews);
   if (visitorsElement) visitorsElement.textContent = k(json.visitors);
 
