@@ -80,6 +80,14 @@ const generateChart = async (chartOptions) => {
     visitorsElement,
   } = chartOptions;
 
+  element.style.display = "flex";
+  element.style.alignItems = "center";
+  element.style.justifyContent = "center";
+  element.style.textAlign = "center";
+
+  element.querySelector("p").textContent =
+    "Simple Analytics chart is loading...";
+
   const params = new URLSearchParams([
     ["info", "false"],
     ["version", "5"],
@@ -201,6 +209,7 @@ const generateChart = async (chartOptions) => {
   const canvas = document.createElement("canvas");
   canvas.ariaLabel = `Chart with visitors data from ${hostname}`;
   element.appendChild(canvas);
+  element.style.aspectRatio = "unset";
 
   Chart.defaults.color = textColor;
   Chart.defaults.borderColor = addOpacity(textColor, 7);
