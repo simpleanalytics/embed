@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -o pipefail -e
 
 RED=`tput setaf 1`
 GREEN=`tput setaf 2`
@@ -9,9 +9,17 @@ SERVER_NAME="external.simpleanalytics.com"
 DIST_PATH='./dist'
 REMOTE_PATH='app@external.simpleanalytics.com:/var/www/default'
 
+error_exit()
+{
+    echo "Error: $1"
+    exit 1
+}
+
+set +o pipefail +e
 nonDist1=$(git diff --cached --name-only | grep -v '^dist/' | wc -l)
 nonDist2=$(git ls-files --modified | grep -v '^dist/' | wc -l)
 nonDist=$(expr $nonDist1 + $nonDist2)
+set -o pipefail -e
 
 if [ $nonDist -gt 0 ]; then
   echo -e "==> ${RED}There are (non build) changes in your repo, commit and test them first${RESET}"
@@ -31,6 +39,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
   npm run build
 
+  set +o pipefail +e
   dist1=$(git diff --cached --name-only dist/ | wc -l)
   dist2=$(git ls-files --modified dist/ | wc -l)
   dist=$(expr $dist1 + $dist2)
@@ -44,6 +53,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   nonDist1=$(git diff --cached --name-only | grep -v '^dist/' | wc -l)
   nonDist2=$(git ls-files --modified | grep -v '^dist/' | wc -l)
   nonDist=$(expr $nonDist1 + $nonDist2)
+  set -o pipefail -e
 
   if [ $nonDist -gt 0 ]; then
     echo -e "==> ${RED}There are (non build) changes in your repo, commit and test them first${RESET}"
