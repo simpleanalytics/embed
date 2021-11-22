@@ -40,8 +40,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   fi
 
   echo "==> Deploying embed files to $SERVER_NAME"
-  # rsync --rsync-path="sudo rsync" "$DIST_PATH/embed.js" "$REMOTE_PATH/embed.js"
-  # rsync --rsync-path="sudo rsync" "$DIST_PATH/embed.js.map" "$REMOTE_PATH/embed.js.map"
+  rsync --rsync-path="sudo rsync" "$DIST_PATH/embed.js" "$REMOTE_PATH/embed.js"
+  rsync --rsync-path="sudo rsync" "$DIST_PATH/embed.js.map" "$REMOTE_PATH/embed.js.map"
 
   echo -e "==> ${GREEN}Woop woop! Deployed to $SERVER_NAME!${RESET}"
 else
