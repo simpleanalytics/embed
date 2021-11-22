@@ -88,6 +88,12 @@ const generateChart = async (chartOptions) => {
   element.querySelector("p").textContent =
     "Simple Analytics chart is loading...";
 
+  if (typeof Proxy !== "function") {
+    element.querySelector("p").textContent =
+      "Can not load chart in this browser.";
+    return log("Can not load chart in this browser", "error");
+  }
+
   const params = new URLSearchParams([
     ["info", "false"],
     ["version", "5"],

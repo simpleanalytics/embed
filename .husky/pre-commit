@@ -7,5 +7,6 @@ npm run build
 # Stop when dist folder has changes
 modifiedDist=$(git ls-files --modified dist | wc -l)
 if [ $modifiedDist != 0 ]; then
-  echo "Checkin files from 'npm run build' before you commit." && exit 1
+  git commit --amend --no-edit --no-verify
+  echo "Auto added the dist folder with 'git commit --amend', run 'git push' now" && exit 1
 fi
