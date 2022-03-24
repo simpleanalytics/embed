@@ -71,6 +71,7 @@ const generateChart = async (chartOptions) => {
     element,
     start,
     end,
+    pages,
     hostname,
     color,
     yMax,
@@ -101,6 +102,7 @@ const generateChart = async (chartOptions) => {
 
   if (start) params.set("start", start);
   if (end) params.set("end", end);
+  if (pages) params.set("pages", pages);
   if (timezone || userTimezone)
     params.set("timezone", timezone || userTimezone);
 
@@ -393,6 +395,7 @@ function onReady() {
         yMax,
         start,
         end,
+        pages,
         timezone,
         expose = "saChart",
         pageViewsSelector,
@@ -414,6 +417,7 @@ function onReady() {
         yMax,
         start,
         end,
+        pages,
         expose,
         timezone: mainDataset.timezone || timezone || null,
         pageViewsElement: document.querySelector(pageViewsSelector),
