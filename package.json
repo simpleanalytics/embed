@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.19.3",
     "chart.js": "^3.6.0",
     "chartjs-adapter-date-fns": "^2.0.0",
     "date-fns": "^2.26.0",

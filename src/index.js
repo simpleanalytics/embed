@@ -73,6 +73,7 @@ const generateChart = async (chartOptions) => {
     end,
     pages,
     hostname,
+    apiKey,
     color,
     yMax,
     expose,
@@ -105,6 +106,7 @@ const generateChart = async (chartOptions) => {
   if (pages) params.set("pages", pages);
   if (timezone || userTimezone)
     params.set("timezone", timezone || userTimezone);
+  if (apiKey) headers['Api-Key'] = apiKey;
 
   const url = `${host}/${hostname}.json?${params}`;
   const response = await fetch(url, { headers });
@@ -391,6 +393,7 @@ function onReady() {
       const { dataset } = element;
       const {
         hostname,
+        apiKey,
         color,
         yMax,
         start,
@@ -413,6 +416,7 @@ function onReady() {
         legacy: false,
         element,
         hostname,
+        apiKey,
         color,
         yMax,
         start,
